@@ -1,9 +1,11 @@
 package com.codecool.cheapflightsearch.model;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 public class Flight {
 
+    @NotEmpty
     private String origin;
     private String destination;
     private Date departureDate;
