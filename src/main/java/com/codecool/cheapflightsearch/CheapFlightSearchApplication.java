@@ -10,4 +10,6 @@ public class CheapFlightSearchApplication {
         SpringApplication.run(CheapFlightSearchApplication.class, args);
     }
 
+
+
 }
