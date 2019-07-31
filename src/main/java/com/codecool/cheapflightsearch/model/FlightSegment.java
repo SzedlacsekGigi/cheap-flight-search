@@ -15,6 +15,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "operating",
     "duration"
 })
+
+
+
 public class FlightSegment {
 
     @JsonProperty("departure")
@@ -129,5 +132,6 @@ public class FlightSegment {
     public void setDuration(String duration) {
         this.duration = duration;
     }
+
 
 }

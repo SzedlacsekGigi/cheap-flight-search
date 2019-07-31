@@ -1,6 +1,8 @@
 package com.codecool.cheapflightsearch;
 
+import com.amadeus.resources.FlightOffer;
 import com.codecool.cheapflightsearch.model.FlightData;
+import com.codecool.cheapflightsearch.model.OfferItem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.springframework.http.*;
@@ -38,6 +40,18 @@ public class TestController {
                 to +
                 "&departureDate=2019-10-01&adults=1&nonStop=true&max=" + numberOfOptions, HttpMethod.GET, entity, FlightData.class);
 
+        for (int i = 0; i < response.getBody().getData().size(); i++) {
+            System.out.println("=============================");
+            System.out.println("Departure from: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getIataCode());
+            System.out.println("Departure at: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getAt());
+            System.out.println("Departure terminal: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getTerminal());
+            System.out.println("Arrival from " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getIataCode());
+            System.out.println("Arrival at " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getAt());
+            System.out.println("Arrival terminal " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getTerminal());
+            System.out.println("Fight duration: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDuration());
+            System.out.println("Total price: " + response.getBody().getData().get(i).getOfferItems().get(0).getPrice().getTotal());
+            System.out.println("=============================");
+        }
         return response.getBody();
     }
 
