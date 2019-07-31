@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping
@@ -29,6 +30,7 @@ public class TestController {
 
     private String accessToken;
     private DataController dataController = new DataController();
+
 
     public List<HashMap<String, String>> getFromToPrice(String from, String to, String date) throws JSONException {
 
@@ -47,18 +49,9 @@ public class TestController {
                 date + "&adults=1&nonStop=true&max=50", HttpMethod.GET, entity, FlightData.class);
 
         dataController.createHashmapFromData(response);
-        System.out.println(dataController.getListOfFlightResult());
-        return dataController.getListOfFlightResult();
-    }
-
-    @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
-    public List<HashMap<String, String>> testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
-        try {
-            return getFromToPrice(from, to, date);
-        } catch (Exception e) {
-            sendPost();
-            return getFromToPrice(from, to, date);
-        }
+        List<HashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
+        dataController.getListOfFlightResult().clear();
+        return listToDisplay;
     }
 
     private void sendPost() throws Exception {
@@ -94,5 +87,16 @@ public class TestController {
         this.accessToken = authObject.accessToken;
 
     }
+
+    @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
+    public List<HashMap<String, String>> testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
+        try {
+            return getFromToPrice(from, to, date);
+        } catch (Exception e) {
+            sendPost();
+            return getFromToPrice(from, to, date);
+        }
+    }
+
 }
 
