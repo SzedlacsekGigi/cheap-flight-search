@@ -1,8 +1,6 @@
 package com.codecool.cheapflightsearch;
 
-import com.amadeus.resources.FlightOffer;
 import com.codecool.cheapflightsearch.model.FlightData;
-import com.codecool.cheapflightsearch.model.OfferItem;
 import com.codecool.cheapflightsearch.service.DataController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
@@ -14,15 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping
@@ -31,8 +28,7 @@ public class TestController {
     private String accessToken;
     private DataController dataController = new DataController();
 
-
-    public List<HashMap<String, String>> getFromToPrice(String from, String to, String date) throws JSONException {
+    private List<HashMap<String, String>> getFromToPrice(String from, String to, String date) {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -54,7 +50,7 @@ public class TestController {
         return listToDisplay;
     }
 
-    private void sendPost() throws Exception {
+    private void sendPost() throws IOException {
 
         String url = "https://test.api.amadeus.com/v1/security/oauth2/token";
         URL obj = new URL(url);
