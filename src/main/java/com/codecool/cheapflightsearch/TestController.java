@@ -4,10 +4,7 @@ import com.codecool.cheapflightsearch.model.FlightData;
 import com.codecool.cheapflightsearch.service.DataController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -23,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@CrossOrigin
 public class TestController {
 
     private String accessToken;
@@ -79,6 +77,7 @@ public class TestController {
 
     }
 
+    @CrossOrigin
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
     public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         try {
