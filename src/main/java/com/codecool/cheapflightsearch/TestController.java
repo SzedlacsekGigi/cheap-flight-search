@@ -3,7 +3,6 @@ package com.codecool.cheapflightsearch;
 import com.codecool.cheapflightsearch.model.FlightData;
 import com.codecool.cheapflightsearch.service.DataController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONException;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +49,7 @@ public class TestController {
         return listToDisplay;
     }
 
-    private void sendPost() throws IOException {
+    private void sendAuthorisationPostRequest() throws IOException {
 
         String url = "https://test.api.amadeus.com/v1/security/oauth2/token";
         URL obj = new URL(url);
@@ -62,11 +61,6 @@ public class TestController {
         wr.writeBytes(urlParameters);
         wr.flush();
         wr.close();
-//
-//        int responseCode = con.getResponseCode();
-//        System.out.println("\nSending 'POST' request to URL : " + url);
-//        System.out.println("Post parameters : " + urlParameters);
-//        System.out.println("Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -89,7 +83,7 @@ public class TestController {
         try {
             return getFromToPrice(from, to, date);
         } catch (Exception e) {
-            sendPost();
+            sendAuthorisationPostRequest();
             return getFromToPrice(from, to, date);
         }
     }
