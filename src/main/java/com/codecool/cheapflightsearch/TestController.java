@@ -89,7 +89,7 @@ public class TestController {
     }
 
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
-    public List<HashMap<String, String>> testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
+    public List<HashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         try {
             return getFromToPrice(from, to, date);
         } catch (Exception e) {
