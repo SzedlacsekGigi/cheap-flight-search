@@ -37,9 +37,7 @@ public class TestController {
                 "&destination=" +
                 to +
                 "&departureDate=2019-10-01&adults=1&nonStop=true&max=" + numberOfOptions, HttpMethod.GET, entity, FlightData.class);
-        System.out.println(response.getBody().getData().get(0).getOfferItems().get(0).getPrice());
-        System.out.println(response.getBody().getData().get(1).getOfferItems().get(0).getPrice());
-        System.out.println(response.getBody().getData().get(2).getOfferItems().get(0).getPrice());
+
         return response.getBody();
     }
 
@@ -58,23 +56,18 @@ public class TestController {
         String url = "https://test.api.amadeus.com/v1/security/oauth2/token";
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-
-        //add reuqest header
         con.setRequestMethod("POST");
-
         String urlParameters = "grant_type=client_credentials&client_id=otaAKsRpDC0aOjAGM0buqAdNquOoHGk1&client_secret=Jk5bAfom5UIcG6a2";
-
-        // Send post request
         con.setDoOutput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         wr.writeBytes(urlParameters);
         wr.flush();
         wr.close();
-
-        int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'POST' request to URL : " + url);
-        System.out.println("Post parameters : " + urlParameters);
-        System.out.println("Response Code : " + responseCode);
+//
+//        int responseCode = con.getResponseCode();
+//        System.out.println("\nSending 'POST' request to URL : " + url);
+//        System.out.println("Post parameters : " + urlParameters);
+//        System.out.println("Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -85,7 +78,6 @@ public class TestController {
             response.append(inputLine);
         }
         in.close();
-
 
         ObjectMapper mapper = new ObjectMapper();
         AuthObject authObject = mapper.readValue(response.toString(), AuthObject.class);
