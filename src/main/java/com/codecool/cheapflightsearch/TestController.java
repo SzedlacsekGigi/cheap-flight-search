@@ -1,5 +1,6 @@
 package com.codecool.cheapflightsearch;
 
+import com.codecool.cheapflightsearch.model.FlightData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.springframework.http.*;
@@ -22,7 +23,7 @@ public class TestController {
     private String accessToken;
 
 
-    public String getFromToPrice(String from, String to, int numberOfOptions) throws JSONException {
+    public FlightData getFromToPrice(String from, String to, int numberOfOptions) throws JSONException {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -31,17 +32,19 @@ public class TestController {
 
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        ResponseEntity<String> response = template.exchange("https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
+        ResponseEntity<FlightData> response = template.exchange("https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
                 from +
                 "&destination=" +
                 to +
-                "&departureDate=2019-10-01&adults=1&nonStop=true&max=" + numberOfOptions, HttpMethod.GET, entity, String.class);
-
+                "&departureDate=2019-10-01&adults=1&nonStop=true&max=" + numberOfOptions, HttpMethod.GET, entity, FlightData.class);
+        System.out.println(response.getBody().getData().get(0).getOfferItems().get(0).getPrice());
+        System.out.println(response.getBody().getData().get(1).getOfferItems().get(0).getPrice());
+        System.out.println(response.getBody().getData().get(2).getOfferItems().get(0).getPrice());
         return response.getBody();
     }
 
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{numberOfOptions}", produces = "application/json")
-    public String testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("numberOfOptions") int numberOfOptions) throws Exception {
+    public FlightData testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("numberOfOptions") int numberOfOptions) throws Exception {
         try {
             return getFromToPrice(from, to, numberOfOptions);
         } catch (Exception e) {
@@ -83,8 +86,6 @@ public class TestController {
         }
         in.close();
 
-        //print result
-        System.out.println(response.toString());
 
         ObjectMapper mapper = new ObjectMapper();
         AuthObject authObject = mapper.readValue(response.toString(), AuthObject.class);
