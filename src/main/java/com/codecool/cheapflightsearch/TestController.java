@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class TestController {
     private String accessToken;
     private DataController dataController = new DataController();
 
-    private List<HashMap<String, String>> getFromToPrice(String from, String to, String date) {
+    private List<LinkedHashMap<String, String>> getFromToPrice(String from, String to, String date) {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -43,8 +44,8 @@ public class TestController {
                 "&departureDate=" +
                 date + "&adults=1&nonStop=true&max=50", HttpMethod.GET, entity, FlightData.class);
 
-        dataController.createHashmapFromData(response);
-        List<HashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
+        dataController.createMapFromData(response);
+        List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
         dataController.getListOfFlightResult().clear();
         return listToDisplay;
     }
@@ -79,7 +80,7 @@ public class TestController {
     }
 
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
-    public List<HashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
+    public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         try {
             return getFromToPrice(from, to, date);
         } catch (Exception e) {
