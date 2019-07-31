@@ -25,7 +25,7 @@ public class TestController {
     private String accessToken;
 
 
-    public FlightData getFromToPrice(String from, String to, int numberOfOptions) throws JSONException {
+    public FlightData getFromToPrice(String from, String to, String date) throws JSONException {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -38,7 +38,8 @@ public class TestController {
                 from +
                 "&destination=" +
                 to +
-                "&departureDate=2019-10-01&adults=1&nonStop=true&max=" + numberOfOptions, HttpMethod.GET, entity, FlightData.class);
+                "&departureDate=" +
+                date + "&adults=1&nonStop=true&max=50", HttpMethod.GET, entity, FlightData.class);
 
         for (int i = 0; i < response.getBody().getData().size(); i++) {
             System.out.println("=============================");
@@ -55,13 +56,13 @@ public class TestController {
         return response.getBody();
     }
 
-    @GetMapping(value = "/getfromtoprice/{from}/{to}/{numberOfOptions}", produces = "application/json")
-    public FlightData testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("numberOfOptions") int numberOfOptions) throws Exception {
+    @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
+    public FlightData testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         try {
-            return getFromToPrice(from, to, numberOfOptions);
+            return getFromToPrice(from, to, date);
         } catch (Exception e) {
             sendPost();
-            return getFromToPrice(from, to, numberOfOptions);
+            return getFromToPrice(from, to, date);
         }
     }
 
