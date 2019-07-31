@@ -3,6 +3,7 @@ package com.codecool.cheapflightsearch;
 import com.amadeus.resources.FlightOffer;
 import com.codecool.cheapflightsearch.model.FlightData;
 import com.codecool.cheapflightsearch.model.OfferItem;
+import com.codecool.cheapflightsearch.service.DataController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.springframework.http.*;
@@ -13,19 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping
 public class TestController {
 
     private String accessToken;
+    private DataController dataController = new DataController();
 
-
-    public FlightData getFromToPrice(String from, String to, String date) throws JSONException {
+    public List<HashMap<String, String>> getFromToPrice(String from, String to, String date) throws JSONException {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -41,23 +46,13 @@ public class TestController {
                 "&departureDate=" +
                 date + "&adults=1&nonStop=true&max=50", HttpMethod.GET, entity, FlightData.class);
 
-        for (int i = 0; i < response.getBody().getData().size(); i++) {
-            System.out.println("=============================");
-            System.out.println("Departure from: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getIataCode());
-            System.out.println("Departure at: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getAt());
-            System.out.println("Departure terminal: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getTerminal());
-            System.out.println("Arrival from " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getIataCode());
-            System.out.println("Arrival at " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getAt());
-            System.out.println("Arrival terminal " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getTerminal());
-            System.out.println("Fight duration: " + response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDuration());
-            System.out.println("Total price: " + response.getBody().getData().get(i).getOfferItems().get(0).getPrice().getTotal());
-            System.out.println("=============================");
-        }
-        return response.getBody();
+        dataController.createHashmapFromData(response);
+        System.out.println(dataController.getListOfFlightResult());
+        return dataController.getListOfFlightResult();
     }
 
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
-    public FlightData testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
+    public List<HashMap<String, String>> testApi2(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         try {
             return getFromToPrice(from, to, date);
         } catch (Exception e) {
