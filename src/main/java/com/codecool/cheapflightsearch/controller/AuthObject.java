@@ -1,4 +1,4 @@
-package com.codecool.cheapflightsearch;
+package com.codecool.cheapflightsearch.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

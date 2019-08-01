@@ -1,7 +1,7 @@
-package com.codecool.cheapflightsearch;
+package com.codecool.cheapflightsearch.controller;
 
 import com.codecool.cheapflightsearch.model.FlightData;
-import com.codecool.cheapflightsearch.service.DataController;
+import com.codecool.cheapflightsearch.service.DataManipulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +14,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping
 @CrossOrigin
-public class TestController {
+public class ApiController {
 
     private String accessToken;
-    private DataController dataController = new DataController();
+    private DataManipulator dataManipulator = new DataManipulator();
 
     private List<LinkedHashMap<String, String>> getFromToPrice(String from, String to, String date) {
 
@@ -42,9 +41,9 @@ public class TestController {
                 "&departureDate=" +
                 date + "&adults=1&nonStop=true&max=50", HttpMethod.GET, entity, FlightData.class);
 
-        dataController.createMapFromData(response);
-        List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
-        dataController.getListOfFlightResult().clear();
+        dataManipulator.createMapFromData(response);
+        List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataManipulator.getListOfFlightResult());
+        dataManipulator.getListOfFlightResult().clear();
         return listToDisplay;
     }
 
@@ -77,16 +76,16 @@ public class TestController {
 
     }
 
-    @CrossOrigin
+    @CrossOrigin //nem kell api key a front olvalról
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
     public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         try {
+
             return getFromToPrice(from, to, date);
         } catch (Exception e) {
             sendAuthorisationPostRequest();
             return getFromToPrice(from, to, date);
         }
     }
-
 }
 
