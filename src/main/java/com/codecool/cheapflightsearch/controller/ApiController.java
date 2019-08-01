@@ -1,7 +1,5 @@
 package com.codecool.cheapflightsearch.controller;
 
-import com.codecool.cheapflightsearch.model.AirplaneData;
-import com.codecool.cheapflightsearch.model.Carriers;
 import com.codecool.cheapflightsearch.model.FlightData;
 import com.codecool.cheapflightsearch.service.DataManipulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
