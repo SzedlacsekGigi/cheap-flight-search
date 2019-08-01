@@ -26,31 +26,7 @@ public class ApiController {
     private String accessToken;
     private DataManipulator dataManipulator = new DataManipulator();
 
-    private static HashMap<String, String> countryCode;
-        static {
-            countryCode = new HashMap<>();
-            countryCode.put("budapest", "BUD");
-            countryCode.put("amsterdam", "AMS");
-            countryCode.put("vienna", "VIE");
-            countryCode.put("rome", "CIA");
-            countryCode.put("paris", "ORY");
-            countryCode.put("london", "LHR");
-            countryCode.put("charleroi", "CRL");
-            countryCode.put("zagreb", "ZAG");
-            countryCode.put("tirana", "TIA");
-            countryCode.put("copenhagen", "CPH");
-            countryCode.put("riga", "RIX");
-            countryCode.put("prague", "PRG");
-            countryCode.put("warsaw", "WAW");
-            countryCode.put("lisbon", "LIS");
-            countryCode.put("tallin", "TLL");
-            countryCode.put("helsinki", "HEL");
-            countryCode.put("moscow", "VKO");
-            countryCode.put("oslo", "OSL");
-            countryCode.put("berlin", "TXL");
-            countryCode.put("stockholm", "BMA");
-            countryCode.put("madrid", "MAD");
-        }
+
 
     private List<LinkedHashMap<String, String>> getFromToPrice(String url) {
         RestTemplate template = new RestTemplate();
@@ -70,8 +46,8 @@ public class ApiController {
     }
 
     private String createURL(String from, String to, String date) {
-        String goodFrom = countryCode.get(from.toLowerCase());
-        String goodTo = countryCode.get(to.toLowerCase());
+        String goodFrom = DataManipulator.countryCode.get(from.toLowerCase());
+        String goodTo = DataManipulator.countryCode.get(to.toLowerCase());
         return "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
                 goodFrom +
                 "&destination=" +
