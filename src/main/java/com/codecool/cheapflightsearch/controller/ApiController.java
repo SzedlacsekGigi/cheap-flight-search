@@ -87,11 +87,8 @@ public class ApiController {
     public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         String goodURL = createURL(from, to, date);
         sendAuthorisationPostRequest();
-        try {
-            return getFromToPrice(goodURL);
-        } catch (Exception e) {
-            return getFromToPrice(goodURL);
-        }
+        return getFromToPrice(goodURL);
+
     }
 
 
