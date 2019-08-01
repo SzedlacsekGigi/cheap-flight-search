@@ -1,5 +1,7 @@
 package com.codecool.cheapflightsearch.controller;
 
+import com.codecool.cheapflightsearch.model.AirplaneData;
+import com.codecool.cheapflightsearch.model.Carriers;
 import com.codecool.cheapflightsearch.model.FlightData;
 import com.codecool.cheapflightsearch.service.DataManipulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -25,8 +26,6 @@ public class ApiController {
 
     private String accessToken;
     private DataManipulator dataManipulator = new DataManipulator();
-
-
 
     private List<LinkedHashMap<String, String>> getFromToPrice(String url) {
         RestTemplate template = new RestTemplate();
@@ -96,5 +95,7 @@ public class ApiController {
             return getFromToPrice(goodURL);
         }
     }
+
+
 }
 
