@@ -26,49 +26,51 @@ public class ApiController {
     private String accessToken;
     private DataManipulator dataManipulator = new DataManipulator();
 
-    private HashMap<String, String> countryCode = new HashMap<>();
-    private HashMap<String, String> createCountryCodeMap(){
-        countryCode.put("budapest", "BUD");
-        countryCode.put("amsterdam", "AMS");
-        countryCode.put("vienna", "VIE");
-        countryCode.put("rome", "CIA");
-        countryCode.put("paris", "ORY");
-        countryCode.put("london", "LHR");
-        countryCode.put("charleroi", "CRL");
-        countryCode.put("zagreb", "ZAG");
-        countryCode.put("tirana", "TIA");
-        countryCode.put("copenhagen", "CPH");
-        countryCode.put("riga", "RIX");
-        countryCode.put("prague", "PRG");
-        countryCode.put("warsaw", "WAW");
-        countryCode.put("lisbon", "LIS");
-        countryCode.put("tallin", "TLL");
-        countryCode.put("helsinki", "HEL");
-        countryCode.put("moscow", "VKO");
-        countryCode.put("oslo", "OSL");
-        countryCode.put("berlin", "TXL");
-        countryCode.put("stockholm", "BMA");
-        return countryCode;
-    }
+    private static HashMap<String, String> countryCode;
+        static {
+            countryCode = new HashMap<>();
+            countryCode.put("budapest", "BUD");
+            countryCode.put("amsterdam", "AMS");
+            countryCode.put("vienna", "VIE");
+            countryCode.put("rome", "CIA");
+            countryCode.put("paris", "ORY");
+            countryCode.put("london", "LHR");
+            countryCode.put("charleroi", "CRL");
+            countryCode.put("zagreb", "ZAG");
+            countryCode.put("tirana", "TIA");
+            countryCode.put("copenhagen", "CPH");
+            countryCode.put("riga", "RIX");
+            countryCode.put("prague", "PRG");
+            countryCode.put("warsaw", "WAW");
+            countryCode.put("lisbon", "LIS");
+            countryCode.put("tallin", "TLL");
+            countryCode.put("helsinki", "HEL");
+            countryCode.put("moscow", "VKO");
+            countryCode.put("oslo", "OSL");
+            countryCode.put("berlin", "TXL");
+            countryCode.put("stockholm", "BMA");
+            countryCode.put("madrid", "MAD");
+        }
 
     private List<LinkedHashMap<String, String>> getFromToPrice(String url) {
-
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(this.accessToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        ResponseEntity<FlightData> response = template.exchange(url, HttpMethod.GET, entity, FlightData.class);
-        dataManipulator.createMapFromData(response);
-        List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataManipulator.getListOfFlightResult());
-        dataManipulator.getListOfFlightResult().clear();
-        return listToDisplay;
+        try {
+            ResponseEntity<FlightData> response = template.exchange(url, HttpMethod.GET, entity, FlightData.class);
+            dataManipulator.createMapFromData(response);
+            List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataManipulator.getListOfFlightResult());
+            dataManipulator.getListOfFlightResult().clear();
+            return listToDisplay;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     private String createURL(String from, String to, String date) {
-        createCountryCodeMap();
         String goodFrom = countryCode.get(from.toLowerCase());
-        System.out.println(goodFrom);
         String goodTo = countryCode.get(to.toLowerCase());
         return "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
                 goodFrom +
@@ -111,10 +113,10 @@ public class ApiController {
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
     public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         String goodURL = createURL(from, to, date);
+        sendAuthorisationPostRequest();
         try {
             return getFromToPrice(goodURL);
         } catch (Exception e) {
-            sendAuthorisationPostRequest();
             return getFromToPrice(goodURL);
         }
     }
