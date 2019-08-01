@@ -20,7 +20,7 @@ public class DataManipulator {
             countryCode.put("rome", "CIA");
             countryCode.put("paris", "ORY");
             countryCode.put("london", "LHR");
-            countryCode.put("charleroi", "CRL");
+            countryCode.put("brussel", "CRL");
             countryCode.put("zagreb", "ZAG");
             countryCode.put("tirana", "TIA");
             countryCode.put("copenhagen", "CPH");
@@ -35,6 +35,7 @@ public class DataManipulator {
             countryCode.put("berlin", "TXL");
             countryCode.put("stockholm", "BMA");
             countryCode.put("madrid", "MAD");
+            countryCode.put("new york", "JFK");
         }
 
     private List<LinkedHashMap<String, String>> listOfFlightResult = new ArrayList<>();

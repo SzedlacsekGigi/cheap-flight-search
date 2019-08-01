@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import sun.awt.image.ImageWatched;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -45,7 +44,7 @@ public class ApiController {
         }
     }
 
-    private ArrayList<LinkedHashMap<String, String>> sortList(ArrayList<LinkedHashMap<String, String>> listToSort) {
+    private ArrayList<LinkedHashMap<String, String>> sortList(List<LinkedHashMap<String, String>> listToSort) {
         ArrayList<LinkedHashMap<String, String>> sortedList = new ArrayList<>();
         LinkedHashMap<String, String> temporary;
         for (int i = 0; i < listToSort.size(); i++) {
