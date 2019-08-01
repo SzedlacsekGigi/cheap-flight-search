@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -89,6 +90,7 @@ public class ApiController {
         countryCode.put("Toulon-Hyères", "TLN");
         countryCode.put("Toulouse Blagnac", "TLS");
         countryCode.put("Tbilisi", "TBS");
+        countryCode.put("Amsterdam", "AMS");
         return countryCode;
     }
 

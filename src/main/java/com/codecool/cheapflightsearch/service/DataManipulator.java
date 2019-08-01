@@ -19,7 +19,7 @@ public class DataManipulator {
             flightResult.put("departure", response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getIataCode());
             flightResult.put("departure_time", convertStringtoDateString(response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getAt()));
             flightResult.put("arrival", response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getIataCode());
-            flightResult.put("arrival_time", convertStringtoDateString(response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getDeparture().getAt()));
+            flightResult.put("arrival_time", convertStringtoDateString(response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getAt()));
             flightResult.put("price", response.getBody().getData().get(i).getOfferItems().get(0).getPrice().getTotal());
             listOfFlightResult.add(flightResult);
         }
