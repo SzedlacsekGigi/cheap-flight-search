@@ -26,7 +26,76 @@ public class TestController {
     private String accessToken;
     private DataController dataController = new DataController();
 
-    private List<LinkedHashMap<String, String>> getFromToPrice(String from, String to, String date) {
+    private HashMap<String, String> countryCode = new HashMap<>();
+    private HashMap<String, String> createCountryCodeMap(){
+        countryCode.put("Budapest", "BUD");
+        countryCode.put("Graz", "GRZ");
+        countryCode.put("Yerevan Zvartnots", "EVN");
+        countryCode.put("Baku", "GYD");
+        countryCode.put("Innsbruck", "INN");
+        countryCode.put("Klagenfurt", "KLU");
+        countryCode.put("Linz", "LNZ");
+        countryCode.put("Salzburg", "SZG");
+        countryCode.put("Vienna", "VIE");
+        countryCode.put("Minsk", "MSQ");
+        countryCode.put("Antwerp", "ANR");
+        countryCode.put("Brussels", "BRU");
+        countryCode.put("Charleroi", "CRL");
+        countryCode.put("Liege", "LGG");
+        countryCode.put("Ostend Bruges", "OST");
+        countryCode.put("Sarajevo", "SJJ");
+        countryCode.put("Tuzla", "TZL");
+        countryCode.put("Burgas", "BOJ");
+        countryCode.put("Sofia", "SOF");
+        countryCode.put("Varna", "VAR");
+        countryCode.put("Dubrovnik", "DBV");
+        countryCode.put("Pula", "PUY");
+        countryCode.put("Split", "SPU");
+        countryCode.put("Zadar", "ZAD");
+        countryCode.put("Zagreb", "ZAG");
+        countryCode.put("Larnaca", "LCA");
+        countryCode.put("Paphos", "PFO");
+        countryCode.put("Brno", "BRQ");
+        countryCode.put("Prague", "PRG");
+        countryCode.put("Aalborg", "AAL");
+        countryCode.put("Aarhus", "AAR");
+        countryCode.put("Billund", "BLL");
+        countryCode.put("Copenhagen", "CPH");
+        countryCode.put("Tallinn", "TLL");
+        countryCode.put("Helsinki Vantaa", "HEL");
+        countryCode.put("Oulu", "OUL");
+        countryCode.put("Rovaniemi", "RVN");
+        countryCode.put("Tampere", "TMP");
+        countryCode.put("Turku", "TKU");
+        countryCode.put("Vaasa", "VAA");
+        countryCode.put("Ajaccio", "AJA");
+        countryCode.put("Basel", "BSL");
+        countryCode.put("Mulhouse", "MLH");
+        countryCode.put("Bastia", "BIA");
+        countryCode.put("Bergerac", "EGC");
+        countryCode.put("Biarritz", "BIQ");
+        countryCode.put("Bordeaux", "BOD");
+        countryCode.put("Brest Bretagne", "BES");
+        countryCode.put("Figari South Corsica ", "FSC");
+        countryCode.put("Lille", "LIL");
+        countryCode.put("Lyon-Saint Exupéry", "LYS");
+        countryCode.put("Marseille", "MRS");
+        countryCode.put("Montpellier", "MPL");
+        countryCode.put("Nantes", "NTE");
+        countryCode.put("Nice", "NCE");
+        countryCode.put("Paris Beauvais", "BVA");
+        countryCode.put("Paris Charles de Gaulle", "CDG");
+        countryCode.put("Paris Orly", "ORY");
+        countryCode.put("Strasbourg", "SXB");
+        countryCode.put("Toulon-Hyères", "TLN");
+        countryCode.put("Toulouse Blagnac", "TLS");
+        countryCode.put("Tbilisi", "TBS");
+        return countryCode;
+    }
+
+
+
+    private List<LinkedHashMap<String, String>> getFromToPrice(String url) {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -35,17 +104,25 @@ public class TestController {
 
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        ResponseEntity<FlightData> response = template.exchange("https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
-                from +
-                "&destination=" +
-                to +
-                "&departureDate=" +
-                date + "&adults=1&nonStop=true&max=50", HttpMethod.GET, entity, FlightData.class);
+        ResponseEntity<FlightData> response = template.exchange(url, HttpMethod.GET, entity, FlightData.class);
 
         dataController.createMapFromData(response);
         List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
         dataController.getListOfFlightResult().clear();
         return listToDisplay;
+    }
+
+    private String createURL(String from, String to, String date) {
+        createCountryCodeMap();
+        String goodFrom = countryCode.get(from);
+        System.out.println(goodFrom);
+        String goodTo = countryCode.get(to);
+        return "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
+                goodFrom +
+                "&destination=" +
+                goodTo +
+                "&departureDate=" +
+                date + "&adults=1&nonStop=true&max=50";
     }
 
     private void sendAuthorisationPostRequest() throws IOException {
@@ -80,11 +157,12 @@ public class TestController {
     @CrossOrigin
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
     public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
+        String goodURL = createURL(from, to, date);
         try {
-            return getFromToPrice(from, to, date);
+            return getFromToPrice(goodURL);
         } catch (Exception e) {
             sendAuthorisationPostRequest();
-            return getFromToPrice(from, to, date);
+            return getFromToPrice(goodURL);
         }
     }
 
