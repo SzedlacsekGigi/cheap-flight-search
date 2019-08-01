@@ -28,70 +28,26 @@ public class ApiController {
 
     private HashMap<String, String> countryCode = new HashMap<>();
     private HashMap<String, String> createCountryCodeMap(){
-
-        countryCode.put("Budapest", "BUD");
-        countryCode.put("Graz", "GRZ");
-        countryCode.put("Yerevan Zvartnots", "EVN");
-        countryCode.put("Baku", "GYD");
-        countryCode.put("Innsbruck", "INN");
-        countryCode.put("Klagenfurt", "KLU");
-        countryCode.put("Linz", "LNZ");
-        countryCode.put("Salzburg", "SZG");
-        countryCode.put("Vienna", "VIE");
-        countryCode.put("Minsk", "MSQ");
-        countryCode.put("Antwerp", "ANR");
-        countryCode.put("Brussels", "BRU");
-        countryCode.put("Charleroi", "CRL");
-        countryCode.put("Liege", "LGG");
-        countryCode.put("Ostend Bruges", "OST");
-        countryCode.put("Sarajevo", "SJJ");
-        countryCode.put("Tuzla", "TZL");
-        countryCode.put("Burgas", "BOJ");
-        countryCode.put("Sofia", "SOF");
-        countryCode.put("Varna", "VAR");
-        countryCode.put("Dubrovnik", "DBV");
-        countryCode.put("Pula", "PUY");
-        countryCode.put("Split", "SPU");
-        countryCode.put("Zadar", "ZAD");
-        countryCode.put("Zagreb", "ZAG");
-        countryCode.put("Larnaca", "LCA");
-        countryCode.put("Paphos", "PFO");
-        countryCode.put("Brno", "BRQ");
-        countryCode.put("Prague", "PRG");
-        countryCode.put("Aalborg", "AAL");
-        countryCode.put("Aarhus", "AAR");
-        countryCode.put("Billund", "BLL");
-        countryCode.put("Copenhagen", "CPH");
-        countryCode.put("Tallinn", "TLL");
-        countryCode.put("Helsinki Vantaa", "HEL");
-        countryCode.put("Oulu", "OUL");
-        countryCode.put("Rovaniemi", "RVN");
-        countryCode.put("Tampere", "TMP");
-        countryCode.put("Turku", "TKU");
-        countryCode.put("Vaasa", "VAA");
-        countryCode.put("Ajaccio", "AJA");
-        countryCode.put("Basel", "BSL");
-        countryCode.put("Mulhouse", "MLH");
-        countryCode.put("Bastia", "BIA");
-        countryCode.put("Bergerac", "EGC");
-        countryCode.put("Biarritz", "BIQ");
-        countryCode.put("Bordeaux", "BOD");
-        countryCode.put("Brest Bretagne", "BES");
-        countryCode.put("Figari South Corsica ", "FSC");
-        countryCode.put("Lille", "LIL");
-        countryCode.put("Lyon-Saint Exupéry", "LYS");
-        countryCode.put("Marseille", "MRS");
-        countryCode.put("Montpellier", "MPL");
-        countryCode.put("Nantes", "NTE");
-        countryCode.put("Nice", "NCE");
-        countryCode.put("Paris Beauvais", "BVA");
-        countryCode.put("Paris Charles de Gaulle", "CDG");
-        countryCode.put("Paris Orly", "ORY");
-        countryCode.put("Strasbourg", "SXB");
-        countryCode.put("Toulon-Hyères", "TLN");
-        countryCode.put("Toulouse Blagnac", "TLS");
-        countryCode.put("Tbilisi", "TBS");
-        countryCode.put("Amsterdam", "AMS");
+        countryCode.put("budapest", "BUD");
+        countryCode.put("amsterdam", "AMS");
+        countryCode.put("vienna", "VIE");
+        countryCode.put("rome", "CIA");
+        countryCode.put("paris", "ORY");
+        countryCode.put("london", "LHR");
+        countryCode.put("charleroi", "CRL");
+        countryCode.put("zagreb", "ZAG");
+        countryCode.put("tirana", "TIA");
+        countryCode.put("copenhagen", "CPH");
+        countryCode.put("riga", "RIX");
+        countryCode.put("prague", "PRG");
+        countryCode.put("warsaw", "WAW");
+        countryCode.put("lisbon", "LIS");
+        countryCode.put("tallin", "TLL");
+        countryCode.put("helsinki", "HEL");
+        countryCode.put("moscow", "VKO");
+        countryCode.put("oslo", "OSL");
+        countryCode.put("berlin", "TXL");
+        countryCode.put("stockholm", "BMA");
         return countryCode;
     }
 
@@ -110,11 +66,10 @@ public class ApiController {
     }
 
     private String createURL(String from, String to, String date) {
-
         createCountryCodeMap();
-        String goodFrom = countryCode.get(from);
+        String goodFrom = countryCode.get(from.toLowerCase());
         System.out.println(goodFrom);
-        String goodTo = countryCode.get(to);
+        String goodTo = countryCode.get(to.toLowerCase());
         return "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
                 goodFrom +
                 "&destination=" +
