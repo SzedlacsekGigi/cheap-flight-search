@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import sun.awt.image.ImageWatched;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -36,10 +37,37 @@ public class ApiController {
             dataManipulator.createMapFromData(response);
             List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataManipulator.getListOfFlightResult());
             dataManipulator.getListOfFlightResult().clear();
-            return listToDisplay;
+            ArrayList<LinkedHashMap<String, String>> sortedListToDisplay = new ArrayList<>();
+            sortedListToDisplay = sortList(listToDisplay);
+            return sortedListToDisplay;
         } catch (Exception e) {
             return new ArrayList<>();
         }
+    }
+
+    private ArrayList<LinkedHashMap<String, String>> sortList(ArrayList<LinkedHashMap<String, String>> listToSort) {
+        ArrayList<LinkedHashMap<String, String>> sortedList = new ArrayList<>();
+        LinkedHashMap<String, String> temporary;
+        for (int i = 0; i < listToSort.size(); i++) {
+            LinkedHashMap<String, String> currentMap = listToSort.get(i);
+            double currentPrice = Double.parseDouble(currentMap.get("price"));
+            sortedList.add(currentMap);
+            int sortedSize = sortedList.size();
+            try {
+                for (int j = sortedSize-2; j < sortedList.size(); j--) {
+                    LinkedHashMap<String, String> previousMap = sortedList.get(j);
+                    double previousPrice = Double.parseDouble(previousMap.get("price"));
+                    if(previousPrice > currentPrice) {
+                        temporary = sortedList.get(j);
+                        sortedList.set(j, sortedList.get(j + 1));
+                        sortedList.set(j + 1, temporary);
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                continue;
+            }
+        }
+        return sortedList;
     }
 
     private String createURL(String from, String to, String date) {
