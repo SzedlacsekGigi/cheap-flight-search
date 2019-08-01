@@ -38,6 +38,32 @@ public class DataManipulator {
             countryCode.put("new york", "JFK");
         }
 
+
+    public static HashMap<String, String> Airlines;
+    static {
+        Airlines = new HashMap<>();
+        Airlines.put("EI", "Aer Lingus");
+        Airlines.put("AF", "Air France");
+        Airlines.put("UU", "Air Austral");
+        Airlines.put("JP", "Adria Airways");
+        Airlines.put("AA", "American Airlines");
+        Airlines.put("OK", "Czech Airlines");
+        Airlines.put("BA", "British Airways");
+        Airlines.put("UA", "United Airlines");
+        Airlines.put("DL", "Delta Air Lines");
+        Airlines.put("FX", "FedEx Express");
+        Airlines.put("AY", "Finnair");
+        Airlines.put("EW", "Eurowings");
+        Airlines.put("BE", "flybe");
+        Airlines.put("KL", "KLM");
+        Airlines.put("LH", "Lufthansa");
+        Airlines.put("SN", "Brussels Airlines");
+        Airlines.put("B6", "JetBlue");
+        Airlines.put("S4", "IBERIA");
+        Airlines.put("IB", "Azores");
+
+    }
+
     private List<LinkedHashMap<String, String>> listOfFlightResult = new ArrayList<>();
 
     public void createMapFromData(ResponseEntity<FlightData> response) {
@@ -48,7 +74,7 @@ public class DataManipulator {
             flightResult.put("arrival", response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getIataCode());
             flightResult.put("arrival_time", convertStringToDateString(response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getArrival().getAt()));
             flightResult.put("price", response.getBody().getData().get(i).getOfferItems().get(0).getPrice().getTotal());
-            flightResult.put("carrier", response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getCarrierCode());
+            flightResult.put("carrier", DataManipulator.Airlines.getOrDefault(response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getCarrierCode(), "N/A"));
             flightResult.put("flightnumber", response.getBody().getData().get(i).getOfferItems().get(0).getServices().get(0).getSegments().get(0).getFlightSegment().getAircraft().getCode());
             listOfFlightResult.add(flightResult);
         }
