@@ -29,13 +29,11 @@ public class DataManipulator {
         return listOfFlightResult;
     }
 
-    private String convertStringtoDateString(String dateString){
+    private String convertStringtoDateString(String dateString) {
         Instant instant = Instant.parse(dateString);
         LocalDateTime departure_time = LocalDateTime.ofInstant(instant, ZoneId.of(ZoneOffset.UTC.getId()));
         return departure_time.toLocalTime().toString();
     }
-
-
 
 
 }

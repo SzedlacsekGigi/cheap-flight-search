@@ -28,6 +28,7 @@ public class ApiController {
 
     private HashMap<String, String> countryCode = new HashMap<>();
     private HashMap<String, String> createCountryCodeMap(){
+
         countryCode.put("Budapest", "BUD");
         countryCode.put("Graz", "GRZ");
         countryCode.put("Yerevan Zvartnots", "EVN");
@@ -94,19 +95,14 @@ public class ApiController {
         return countryCode;
     }
 
-
-
     private List<LinkedHashMap<String, String>> getFromToPrice(String url) {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(this.accessToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-
         ResponseEntity<FlightData> response = template.exchange(url, HttpMethod.GET, entity, FlightData.class);
-
         dataManipulator.createMapFromData(response);
         List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataManipulator.getListOfFlightResult());
         dataManipulator.getListOfFlightResult().clear();
@@ -114,6 +110,7 @@ public class ApiController {
     }
 
     private String createURL(String from, String to, String date) {
+
         createCountryCodeMap();
         String goodFrom = countryCode.get(from);
         System.out.println(goodFrom);
@@ -155,7 +152,7 @@ public class ApiController {
 
     }
 
-    @CrossOrigin //nem kell api key a front olvalról
+    @CrossOrigin //nem kell api key a front oldalról
     @GetMapping(value = "/getfromtoprice/{from}/{to}/{date}", produces = "application/json")
     public List<LinkedHashMap<String, String>> getFromToPriceWithDate(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("date") String date) throws Exception {
         String goodURL = createURL(from, to, date);
