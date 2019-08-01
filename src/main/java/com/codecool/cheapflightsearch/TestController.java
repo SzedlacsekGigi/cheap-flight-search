@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import sun.awt.image.ImageWatched;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -27,7 +28,8 @@ public class TestController {
     private DataController dataController = new DataController();
 
     private HashMap<String, String> countryCode = new HashMap<>();
-    private HashMap<String, String> createCountryCodeMap(){
+
+    private HashMap<String, String> createCountryCodeMap() {
         countryCode.put("budapest", "BUD");
         countryCode.put("amsterdam", "AMS");
         countryCode.put("vienna", "VIE");
@@ -52,8 +54,7 @@ public class TestController {
     }
 
 
-
-    private List<LinkedHashMap<String, String>> getFromToPrice(String url) {
+    private ArrayList<LinkedHashMap<String, String>> getFromToPrice(String url) {
 
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -65,15 +66,41 @@ public class TestController {
         ResponseEntity<FlightData> response = template.exchange(url, HttpMethod.GET, entity, FlightData.class);
 
         dataController.createMapFromData(response);
-        List<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
+        ArrayList<LinkedHashMap<String, String>> listToDisplay = new ArrayList<>(dataController.getListOfFlightResult());
         dataController.getListOfFlightResult().clear();
-        return listToDisplay;
+        ArrayList<LinkedHashMap<String, String>> sortedListToDisplay = new ArrayList<>();
+        sortedListToDisplay = sortList(listToDisplay);
+        return sortedListToDisplay;
+    }
+
+    private ArrayList<LinkedHashMap<String, String>> sortList(ArrayList<LinkedHashMap<String, String>> listToSort) {
+        ArrayList<LinkedHashMap<String, String>> sortedList = new ArrayList<>();
+        LinkedHashMap<String, String> temporary;
+        for (int i = 0; i < listToSort.size(); i++) {
+            LinkedHashMap<String, String> currentMap = listToSort.get(i);
+            double currentPrice = Double.parseDouble(currentMap.get("price"));
+            sortedList.add(currentMap);
+            int sortedSize = sortedList.size();
+            try {
+                for (int j = sortedSize-2; j < sortedList.size(); j--) {
+                    LinkedHashMap<String, String> previousMap = sortedList.get(j);
+                    double previousPrice = Double.parseDouble(previousMap.get("price"));
+                    if(previousPrice > currentPrice) {
+                        temporary = sortedList.get(j);
+                        sortedList.set(j, sortedList.get(j + 1));
+                        sortedList.set(j + 1, temporary);
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                continue;
+            }
+        }
+        return sortedList;
     }
 
     private String createURL(String from, String to, String date) {
         createCountryCodeMap();
         String goodFrom = countryCode.get(from.toLowerCase());
-        System.out.println(goodFrom);
         String goodTo = countryCode.get(to.toLowerCase());
         return "https://test.api.amadeus.com/v1/shopping/flight-offers?origin=" +
                 goodFrom +
